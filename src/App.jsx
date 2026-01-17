@@ -40,7 +40,15 @@ function App() {
           </div>
         </header>
 
-        
+        <main className="py-8">
+          {!user ? (
+            <Login onLogin={handleLogin} />
+          ) : user.role === 'student' ? (
+            <StudentDashboard user={user} onLogout={handleLogout} />
+          ) : (
+            <InstructorDashboard user={user} onLogout={handleLogout} />
+          )}
+        </main>
       </div>
     </>
   )

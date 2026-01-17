@@ -35,7 +35,20 @@ export default function Quiz({ student }) {
         }
     }, [])
 
-    
+    // track submission record for student (released flag)
+    useEffect(() => {
+        if (!student) return
+        const subs = JSON.parse(localStorage.getItem('quiz_submissions') || '[]')
+        setSubmissionRecord(subs.find(x => x.studentId === student.studentId) || null)
+        function onStorage(e) {
+        if (e.key === 'quiz_submissions') {
+            const subs2 = JSON.parse(localStorage.getItem('quiz_submissions') || '[]')
+            setSubmissionRecord(subs2.find(x => x.studentId === student.studentId) || null)
+        }
+        }
+        window.addEventListener('storage', onStorage)
+        return () => window.removeEventListener('storage', onStorage)
+    }, [student])
 
     function finalizeQuiz() {
         if (completed) return

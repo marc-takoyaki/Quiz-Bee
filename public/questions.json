@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "q": "What does HTML stand for?",
+    "choices": [
+      "Hyper Text Markup Language",
+      "High Transfer Markup Language",
+      "Hyperlinks and Text Markup Language",
+      "Home Tool Markup Language"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 2,
+    "q": "Which CSS utility-first framework is used in this project?",
+    "choices": ["Bootstrap", "Bulma", "Tailwind CSS", "Material UI"],
+    "answer": 2
+  },
+  {
+    "id": 3,
+    "q": "In React, which hook is used for state in a functional component?",
+    "choices": ["useEffect", "useState", "useContext", "useReducer"],
+    "answer": 1
+  },
+  {
+    "id": 4,
+    "q": "Which tool is commonly used to scaffold this React project?",
+    "choices": ["create-react-app", "Vite", "Webpack CLI", "Parcel"],
+    "answer": 1
+  },
+  {
+    "id": 5,
+    "q": "Which file contains the Tailwind directives in this repo?",
+    "choices": ["main.jsx", "index.css", "App.jsx", "vite.config.js"],
+    "answer": 1
+  }
+]

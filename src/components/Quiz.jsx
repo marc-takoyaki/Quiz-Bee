@@ -210,7 +210,6 @@ export default function Quiz({ student }) {
                     <Question q={q} selected={selected} onChoose={handleChoose} />
 
                     <div className="mt-6 flex justify-between items-center">
-                        <div className="text-sm text-gray-700">Score: {score}</div>
                         <button onClick={handleNext} disabled={selected === null} className={`px-4 py-2 rounded ${selected === null ? 'bg-gray-200 text-gray-500' : 'bg-blue-600 text-white'}`}>
                             {index + 1 < questions.length ? 'Next' : 'Finish'}
                         </button>

@@ -50,8 +50,8 @@ export default function Quiz({ student }) {
         return () => window.removeEventListener('storage', onStorage)
     }, [student])
 
-    function finalizeQuiz() {
-        if (completed) return
+    function finalizeQuiz(violationCount) {
+        if (completed || !questions) return
         // count current selection if any
         const q = questions?.[index]
         let finalScore = score
@@ -71,7 +71,7 @@ export default function Quiz({ student }) {
             studentId: student.studentId,
             score: finalScore,
             total: questions.length,
-            violations: violations.length,
+            violations: violationCount ?? 0,
             at: new Date().toISOString(),
             released: false
             }
@@ -94,7 +94,7 @@ export default function Quiz({ student }) {
         setIndex((n) => n + 1)
         } else {
         // Last question — finalize to compute final score and persist submission
-        finalizeQuiz()
+        finalizeQuiz(violations.length)
         }
     }
 
@@ -108,31 +108,41 @@ export default function Quiz({ student }) {
         const next = [...v, { type, at: new Date().toISOString() }]
         setWarning(`Violation: ${type}. You have ${Math.max(0, 3 - next.length)} chances left.`)
         setTimeout(() => setWarning(null), 4000)
-        if (next.length >= 3) {
-            setTimeout(() => {
-            finalizeQuiz()
-            setWarning('Three violations — quiz auto-submitted')
-            }, 300)
-        }
         return next
         })
     }
 
+    // auto-finalize when violations reach 3
+    useEffect(() => {
+        if (completed || violations.length < 3) return
+        const timer = setTimeout(() => {
+            finalizeQuiz(3)
+            setWarning('Three violations — quiz auto-submitted')
+        }, 300)
+        return () => clearTimeout(timer)
+    }, [violations.length, completed])
+
     // timer
     useEffect(() => {
-        if (completed) return
+        if (completed || !questions) return
         const t = setInterval(() => {
             setTimeLeft((tLeft) => {
                 if (tLeft <= 1) {
                     clearInterval(t)
-                    finalizeQuiz()
+                    setCompleted(true)
                     return 0
                 }
                 return tLeft - 1
             })
         }, 1000)
         return () => clearInterval(t)
-    }, [completed])
+    }, [completed, questions])
+
+    // auto-finalize when time runs out
+    useEffect(() => {
+        if (completed || timeLeft > 0 || !questions) return
+        finalizeQuiz(violations.length)
+    }, [timeLeft, completed, violations.length, questions])
 
     // visibility & blur
     useEffect(() => {

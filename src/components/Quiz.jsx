@@ -122,13 +122,21 @@ export default function Quiz({ student }) {
         return () => clearTimeout(timer)
     }, [violations.length, completed])
 
-    // timer
+    const violationsRef = useRef(violations)
+    
+    useEffect(() => {
+        violationsRef.current = violations
+    }, [violations])
+
+    // timer and auto-finalize when time runs out
     useEffect(() => {
         if (completed || !questions) return
         const t = setInterval(() => {
             setTimeLeft((tLeft) => {
                 if (tLeft <= 1) {
                     clearInterval(t)
+                    // Call finalizeQuiz before setting completed
+                    finalizeQuiz(violationsRef.current.length)
                     setCompleted(true)
                     return 0
                 }
@@ -137,12 +145,6 @@ export default function Quiz({ student }) {
         }, 1000)
         return () => clearInterval(t)
     }, [completed, questions])
-
-    // auto-finalize when time runs out
-    useEffect(() => {
-        if (completed || timeLeft > 0 || !questions) return
-        finalizeQuiz(violations.length)
-    }, [timeLeft, completed, violations.length, questions])
 
     // visibility & blur
     useEffect(() => {

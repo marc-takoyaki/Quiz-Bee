@@ -3,7 +3,7 @@ import Question from './Question'
 import Result from './Result'
 
 export default function Quiz({ student }) {
-    const TOTAL_TIME = 180 // seconds
+    const TOTAL_TIME = 30 // seconds
     const [questions, setQuestions] = useState(null)
     const [index, setIndex] = useState(0)
     const [selected, setSelected] = useState(null)
